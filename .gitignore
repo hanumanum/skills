@@ -1,0 +1,9 @@
+# Track only skill folders whose names start with han-
+/*
+!/han-*/
+!/han-*/**
+!/README.md
+!/.gitignore
+
+__pycache__/
+*.pyc

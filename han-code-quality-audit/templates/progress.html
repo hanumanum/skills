@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Code quality audit</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      margin: 0;
+      font: 15px/1.45 "Segoe UI", sans-serif;
+      background: #f3f3f0;
+      color: #1c1c1c;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { background: #181816; color: #f2f2ee; }
+      .now, table, ul { background: #22221f !important; border-color: #3a3a36 !important; }
+      th, td, li { border-color: #3a3a36 !important; }
+      .meta, .when, h2 { color: #aaa !important; }
+    }
+    header { padding: 20px 28px 0; }
+    h1 { font-size: 22px; font-weight: 600; margin: 0; }
+    .meta { color: #5c5c5c; font-size: 13px; margin-top: 4px; }
+    .now {
+      margin: 16px 28px;
+      padding: 16px 18px;
+      background: #fff;
+      border: 1px solid #ddd;
+    }
+    .phase { font-size: 22px; font-weight: 600; }
+    .detail {
+      margin-top: 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 13px;
+      word-break: break-word;
+    }
+    main {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+      padding: 0 28px 28px;
+    }
+    h2 {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #5c5c5c;
+      margin: 0 0 8px;
+    }
+    table { width: 100%; border-collapse: collapse; background: #fff; }
+    th, td {
+      text-align: left;
+      padding: 8px 10px;
+      border-bottom: 1px solid #e4e4e0;
+      vertical-align: top;
+      font-size: 14px;
+    }
+    ul { list-style: none; padding: 0; margin: 0; background: #fff; border: 1px solid #e4e4e0; }
+    li { padding: 8px 10px; border-bottom: 1px solid #e4e4e0; }
+    .when { color: #5c5c5c; font-size: 12px; display: block; }
+    .running { font-weight: 600; }
+    .stack { display: grid; gap: 16px; }
+    @media (max-width: 860px) {
+      main { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="title">Code quality audit</h1>
+    <div class="meta" id="meta"></div>
+  </header>
+  <div class="now">
+    <div class="phase" id="phase">Starting</div>
+    <div class="detail" id="detail"></div>
+  </div>
+  <main>
+    <section>
+      <h2>This run</h2>
+      <table>
+        <thead>
+          <tr><th>Property</th><th>State</th><th>Report</th></tr>
+        </thead>
+        <tbody id="properties"></tbody>
+      </table>
+      <h2 style="margin-top: 20px">Activity</h2>
+      <ul id="log"></ul>
+    </section>
+    <div class="stack">
+      <section>
+        <h2>Tools</h2>
+        <table>
+          <thead>
+            <tr><th>Tool</th><th>State</th><th>Output</th></tr>
+          </thead>
+          <tbody id="tools"></tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+  <script>
+    const PHASES = {
+      detecting: "Detecting languages",
+      waiting: "Waiting for a tool install answer",
+      "running-tool": "Running a tool",
+      reading: "Reading source",
+      analyzing: "Analyzing",
+      writing: "Writing the report",
+      done: "Run finished"
+    };
+
+    function el(tag, text, className) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      node.textContent = text == null ? "" : String(text);
+      return node;
+    }
+
+    function clear(node) {
+      while (node.firstChild) node.removeChild(node.firstChild);
+    }
+
+    function render(data) {
+      const names = (data.properties || []).map((item) => item.name).join(", ");
+      document.getElementById("title").textContent = data.repoName
+        ? "Code quality audit · " + data.repoName
+        : "Code quality audit";
+      document.getElementById("meta").textContent =
+        "Run " + (data.runId || "") + (names ? " · " + names : "") + " · refreshes every second";
+      const phase = data.activity && data.activity.phase;
+      document.getElementById("phase").textContent = PHASES[phase] || phase || "Starting";
+      document.getElementById("detail").textContent = (data.activity && data.activity.detail) || "";
+
+      const properties = document.getElementById("properties");
+      clear(properties);
+      (data.properties || []).forEach((item) => {
+        const row = document.createElement("tr");
+        row.appendChild(el("td", item.id + "  " + item.name));
+        const state = item.state || "queued";
+        const extra = [
+          item.mode || "",
+          item.findings == null ? "" : item.findings + " findings"
+        ].filter(Boolean).join(" · ");
+        row.appendChild(el("td", extra ? state + " · " + extra : state, state === "running" ? "running" : ""));
+        row.appendChild(el("td", item.report || ""));
+        properties.appendChild(row);
+      });
+
+      const tools = document.getElementById("tools");
+      clear(tools);
+      const toolRows = data.tools || [];
+      toolRows.forEach((item) => {
+        const row = document.createElement("tr");
+        const name = item.language ? item.name + " · " + item.language : item.name;
+        row.appendChild(el("td", name));
+        const stateText = item.detail && item.state !== "running"
+          ? item.state + " · " + item.detail
+          : item.state;
+        row.appendChild(el("td", stateText, item.state === "running" ? "running" : ""));
+        row.appendChild(el("td", item.output || ""));
+        tools.appendChild(row);
+      });
+
+      const log = document.getElementById("log");
+      clear(log);
+      (data.log || []).slice(0, 12).forEach((item) => {
+        const line = document.createElement("li");
+        line.appendChild(el("span", (PHASES[item.phase] || item.phase) + " — " + (item.detail || "")));
+        line.appendChild(el("span", item.at || "", "when"));
+        log.appendChild(line);
+      });
+    }
+
+    async function tick() {
+      try {
+        const response = await fetch("/status.json", { cache: "no-store" });
+        render(await response.json());
+      } catch (err) {
+        document.getElementById("phase").textContent = "Progress page cannot read status";
+        document.getElementById("detail").textContent = String(err);
+      }
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
