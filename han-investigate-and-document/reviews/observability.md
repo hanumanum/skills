@@ -16,8 +16,4 @@ Search logs, metrics, traces, health routes, and alert config. Cite the file for
 
 Write the mechanisms that exist and the ones that do not. A file log means the system is not without logging. Say which of metrics, traces, alerts, and health are absent.
 
-## README and verdict
-
-One "What is wrong" bullet names the log the code can write, then the missing mechanisms, and links `docs/operations/observability-guide.md`.
-
-The verdict requires a health check, metrics, and alerts on the replacement. When the code also fails to record who changed a record, that stays a separate bullet (audit), with its own evidence. Do not fold audit into "no logs" when a log file exists.
+When the code records who changed a record, cite that file. When it does not, say so on this page. Do not fold that into "no logs" when a log file exists.

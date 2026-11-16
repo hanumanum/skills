@@ -2,15 +2,12 @@
 name: han-investigate-and-document
 description: >-
   Investigate an unfamiliar codebase and produce a system guide under docs/
-  plus a root README (what the repo is, what it does, what is wrong, verdict).
-  Required reviews: YesEm/ImID single sign-on, ABAC/RBAC strength, observability
-  gaps, Henaket design-system compatibility, and Once Only (register facts
-  asked or stored). Also covers vision, C4,
+  plus a root README (what the repo is and what it does). Covers vision, C4,
   dependencies/SBOM, data and table-fill sources, behavior (including
-  required document uploads), operations,
-  security, maintainability, and local setup. Use when the user invokes
-  /han-investigate-and-document, or asks to reverse-engineer, map, document, or
-  onboard onto an unknown repository.
+  required document uploads), operations, authentication, access control,
+  the UI the code uses, observability, security, maintainability, and local
+  setup. Use when the user invokes /han-investigate-and-document, or asks to
+  reverse-engineer, map, document, or onboard onto an unknown repository.
 disable-model-invocation: true
 ---
 
@@ -33,7 +30,8 @@ unfamiliar codebase for onboarding.
 4. **Write docs into the target repo** under `docs/` unless the user names another path. Section files live in `docs/<section>/`, and the index is `docs/00-start-here.md`. Do not create `docs/investigate/`. Do not put output only in chat.
 5. **Missing tool gate.** If a tool is not installed, stop and ask. Install it only after the user agrees. A decline means skip that tool. Never install, and never fetch a package on the fly, before that reply.
 6. **Scope control.** Default = full outline. If the user names sections, only produce those. If the repo is huge, deliver a thin-slice pass first (context + containers + start-here), then deepen.
-7. **Wording in generated files.** Text written under `docs/` must not contain `investigate`, `investigation`, or `investigated`. Call the set a **system guide**. The slash command is internal and must not appear in those files.
+7. **Wording in generated files.** Text written under `docs/` and in the root `README.md` must not contain `investigate`, `investigation`, or `investigated`. Call the set a **system guide**. The slash command is internal and must not appear in those files.
+8. **Domain-independent.** Describe the mechanisms this repository uses. Name an identity provider, a design system, or an external data source only when the code names it. Do not measure the tree against a standard the repository does not reference. Do not write a verdict, and do not recommend rewrite, replace, or keep.
 
 ## Prerequisites (run first)
 
@@ -83,7 +81,7 @@ Documentation progress:
 - [ ] 5. Data (model, dictionary, flows, migrations, **table-fill sources**)
 - [ ] 6. Behavior & logic (sequences, states, rules, API, events, **required document uploads**)
 - [ ] 7. Operations (deploy, runbook, config, observability, CI/CD)
-- [ ] 8. Quality & security (tests, threat model, SSO, access control, Henaket, Once Only, debt, **maintainability**)
+- [ ] 8. Quality & security (tests, threat model, authentication, access control, UI, debt, **maintainability**)
 - [ ] 9. Onboarding (local setup, contribution, start-here index)
 - [ ] 10. Gap review & confidence pass
 - [ ] 11. Root README
@@ -136,15 +134,14 @@ npx --yes @cyclonedx/cdxgen -r -o docs/dependencies/sbom.cdx.json
 
 Do not commit huge SBOM binaries to chat; write the file and summarize criticality in the inventory markdown.
 
-**Product reviews (required in steps 7 and 8):** write the five findings below, then link each from `docs/00-start-here.md` and from the threat model or the observability page. Rules and the grade tables live in [reviews/](reviews/).
+**Authentication, access control, UI, and observability (required in steps 7 and 8):** write the pages below from the code, then link each from `docs/00-start-here.md`. Link authentication and access control from the threat model. Rules live in [reviews/](reviews/).
 
-| Finding | Write | Review |
-|---------|-------|--------|
-| YesEm / ImID, called or not | `docs/quality-security/sso.md` | [reviews/sso.md](reviews/sso.md) |
-| ABAC / RBAC, grade and whether every action checks it | `docs/quality-security/access-control.md` | [reviews/access-control.md](reviews/access-control.md) |
+| Page | Write | Review |
+|------|-------|--------|
+| How sign-in works in this tree | `docs/quality-security/authentication.md` | [reviews/authentication.md](reviews/authentication.md) |
+| Who may do what, and the grade the checks match | `docs/quality-security/access-control.md` | [reviews/access-control.md](reviews/access-control.md) |
 | Logs, metrics, traces, alerts, health | Gaps section in `docs/operations/observability-guide.md` | [reviews/observability.md](reviews/observability.md) |
-| Henaket on each user surface | `docs/quality-security/design-system.md` | [reviews/design-system.md](reviews/design-system.md) |
-| Once Only: register facts asked or stored | `docs/quality-security/once-only.md` | [reviews/once-only.md](reviews/once-only.md) |
+| UI stack on each user surface | `docs/quality-security/ui.md` | [reviews/ui.md](reviews/ui.md) |
 
 **Maintainability (required in step 8):** detect languages, ask before any install, then run and write the report:
 
@@ -170,9 +167,9 @@ Synthesize `docs/quality-security/maintainability-analysis.md` from `static-anal
 
 ### 11. Root README
 
-Write `README.md` at the repository root after the guide is linked. Shape, required bullets, and verdict rules: [templates/root-readme.md](templates/root-readme.md). The five reviews above each appear in "What is wrong" and, when they support the conclusion, in the verdict. The file does not ask the reader to decide.
+Write `README.md` at the repository root after the guide is linked. Shape: [templates/root-readme.md](templates/root-readme.md). The file says what the repository is and what it does. It does not contain a verdict.
 
-Then tell the user what was produced (path tree, including `README.md`) and the suggested next deepen pass. The Once Only page opens with the two violation counts from [reviews/once-only.md](reviews/once-only.md).
+Then tell the user what was produced (path tree, including `README.md`) and the suggested next deepen pass.
 
 ## Confidence legend (use everywhere)
 
@@ -195,11 +192,10 @@ Then tell the user what was produced (path tree, including `README.md`) and the 
 
 - [doc-outline.md](doc-outline.md) — required documentation structure (authoritative)
 - [analysis-playbook.md](analysis-playbook.md) — how to read each area
-- [reviews/sso.md](reviews/sso.md) — YesEm / ImID, implemented or not
-- [reviews/access-control.md](reviews/access-control.md) — ABAC / RBAC grade and strength
+- [reviews/authentication.md](reviews/authentication.md) — how sign-in works in this tree
+- [reviews/access-control.md](reviews/access-control.md) — who may do what, and the grade the checks match
 - [reviews/observability.md](reviews/observability.md) — logs, metrics, traces, alerts, health
-- [reviews/design-system.md](reviews/design-system.md) — Henaket on each user surface
-- [reviews/once-only.md](reviews/once-only.md) — register facts asked from the user, or stored beyond an id
+- [reviews/ui.md](reviews/ui.md) — UI stack on each user surface
 - [reviews/required-document-uploads.md](reviews/required-document-uploads.md) — forms that require the user to upload a file, with the document and its intention
 - [maintainability.md](maintainability.md) — language-aware static maintainability analysis
 - [tooling.md](tooling.md) — tool install matrix and SBOM/diagram commands

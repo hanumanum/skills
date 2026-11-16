@@ -2,7 +2,7 @@
 
 Copy structures into `docs/` files. Strip unused rows; keep confidence tags. Do not write `investigate`, `investigation`, or `investigated` into those files.
 
-The repository-root `README.md` is not one of these section pages. Write it last from [root-readme.md](root-readme.md). It links `sso.md`, `access-control.md`, `observability-guide.md`, `design-system.md`, and `once-only.md`.
+The repository-root `README.md` is not one of these section pages. Write it last from [root-readme.md](root-readme.md). It says what the repository is and what it does. It links `authentication.md`, `access-control.md`, `observability-guide.md`, and `ui.md`.
 
 ## vision-product-brief.md
 
@@ -179,16 +179,16 @@ App only **reads** these. Fill method is **unknown**.
 - [Data flow](./data-flow.md)
 ```
 
-## sso.md
+## authentication.md
 
 ```markdown
-# Single sign-on
+# Authentication
 
-YesEm and ImID are the staff and voter sign-in this guide measures against. A citizen already on a national ID provider stays on that provider.
+How this repository signs people and clients in. The mechanism is the one the code calls. A provider is named only when the code names it.
 
-| Surface | Who | Mechanism in this tree | YesEm or ImID called? | Confidence |
-|---------|-----|------------------------|-----------------------|------------|
-| | | local password / session / national ID / SQL login / none | yes — cite file / no | |
+| Surface | Who | Mechanism in this tree | Confidence |
+|---------|-----|------------------------|------------|
+| | | local password / session / OAuth or OIDC / API key / platform auth / database login / none | |
 
 ## Evidence
 
@@ -200,20 +200,22 @@ YesEm and ImID are the staff and voter sign-in this guide measures against. A ci
 - [Threat model](threat-model.md)
 ```
 
+Rules: [reviews/authentication.md](../reviews/authentication.md).
+
 ## access-control.md
 
 ```markdown
 # Access control
 
-Sign-in is [Single sign-on](sso.md). This page is what that identity is allowed to do.
-
-Bar for a replacement: attributes of the person, the resource, and the action (ABAC). A role checked on every state-changing action (RBAC) is the minimum.
+Sign-in is [Authentication](authentication.md). This page is what that identity is allowed to do.
 
 | Surface | Who is recognized | What allows the action | Confidence |
 |---------|-------------------|------------------------|------------|
 | | | | |
 
 ## Grade
+
+The grade names the checks in this tree.
 
 | Grade | Applies | Why |
 |-------|---------|-----|
@@ -224,43 +226,25 @@ Bar for a replacement: attributes of the person, the resource, and the action (A
 - 
 ```
 
-## design-system.md
+Rules: [reviews/access-control.md](../reviews/access-control.md).
+
+## ui.md
 
 ```markdown
-# Design system
+# User interface
 
-Henaket is the design system these screens are measured against. No match in the tree means this repository does not reference it.
+The UI stack this repository uses. A design system is named only when the code references it.
 
-| Surface | Who uses it | UI stack in this tree | Henaket referenced? | Confidence |
-|---------|-------------|----------------------|---------------------|------------|
-| | citizen / staff / desktop | | yes — cite file / no | |
+| Surface | Who uses it | UI stack in this tree | Design system named in code | Confidence |
+|---------|-------------|----------------------|-----------------------------|------------|
+| | end user / operator / desktop | | file, or none | |
 
 ## Evidence
 
 - 
 ```
 
-## once-only.md
-
-```markdown
-# Once Only
-
-## Violations
-
-| Category | Data points |
-|----------|-------------|
-| Asked from the user | |
-| Stored, and not an id | |
-
-<data points in both>. <unique violation rows> rows are violations.
-
-A register id may be stored: PSN, SSN, tax id, company registration number, and the sign-in subject.
-
-| Model | field | is from register | is asked to user | is stored | stored JSON snippet | notes | links to evidence files | status |
-|-------|-------|------------------|------------------|-----------|---------------------|-------|-------------------------|--------|
-```
-
-Rules: [reviews/once-only.md](../reviews/once-only.md).
+Rules: [reviews/ui.md](../reviews/ui.md).
 
 ## required-document-uploads.md
 
@@ -309,7 +293,7 @@ Rules: [reviews/required-document-uploads.md](../reviews/required-document-uploa
 ## Trust boundaries
 ## Authn / authz model
 
-Sign-in detail: [Single sign-on](sso.md). What each identity may do: [Access control](access-control.md).
+Sign-in detail: [Authentication](authentication.md). What each identity may do: [Access control](access-control.md).
 
 ## Attack surface
 | Entry | Risk | Mitigations present | Gaps | Confidence |
@@ -338,7 +322,7 @@ Date:
 Scope: (paths / languages)
 Tools: (name + version)
 
-## Executive verdict
+## Risk
 
 Risk: low | moderate | elevated | critical — rationale.
 

@@ -46,10 +46,9 @@ docs/
 │   ├── maintainability-analysis.md
 │   ├── static-analysis/              # lizard (+ stack) raw outputs
 │   ├── threat-model.md
-│   ├── sso.md                        # YesEm / ImID, called or not
-│   ├── access-control.md             # ABAC / RBAC grade and strength
-│   ├── design-system.md              # Henaket on each user surface
-│   ├── once-only.md                  # register facts asked, or stored beyond an id
+│   ├── authentication.md             # how sign-in works in this tree
+│   ├── access-control.md             # who may do what, and the grade the checks match
+│   ├── ui.md                         # UI stack on each user surface
 │   └── known-issues-tech-debt.md
 └── onboarding/
     ├── local-setup.md
@@ -107,12 +106,11 @@ docs/
 ### Quality & security
 
 - **Test strategy & coverage map** — what's tested, how, and the gaps
-- **Maintainability static analysis** — language-detected analyzers (lizard + stack tools); complexity/size hotspots; verdict and refactor priorities
-- **Threat model** — attack surface, auth/authorization model, known risks. Link `sso.md` and `access-control.md` from the auth section.
-- **Single sign-on** — whether YesEm or ImID is called, and the mechanism the code uses instead. Review: [reviews/sso.md](reviews/sso.md)
-- **Access control** — grade None / Weak / RBAC / ABAC, and whether every state-changing action is checked. Review: [reviews/access-control.md](reviews/access-control.md)
-- **Design system** — each user surface and whether it uses Henaket. Review: [reviews/design-system.md](reviews/design-system.md)
-- **Once Only** — one row per data point. A register fact the user is asked to type is a violation. A register fact stored locally is a violation, except an id (PSN, SSN, tax id, company registration number, sign-in subject). The page opens with those two counts. Review: [reviews/once-only.md](reviews/once-only.md)
+- **Maintainability static analysis** — language-detected analyzers (lizard + stack tools); complexity/size hotspots and refactor priorities
+- **Threat model** — attack surface, auth/authorization model, known risks. Link `authentication.md` and `access-control.md` from the auth section.
+- **Authentication** — the sign-in mechanism the code calls. Name a provider only when the code names it. Review: [reviews/authentication.md](reviews/authentication.md)
+- **Access control** — who may do what. Grade None / Weak / RBAC / ABAC from the checks in this tree. Review: [reviews/access-control.md](reviews/access-control.md)
+- **User interface** — each user surface and the UI stack the code uses. Name a design system only when the code references it. Review: [reviews/ui.md](reviews/ui.md)
 - **Known issues / tech debt register** — landmines, TODOs, deprecated paths
 
 ### Onboarding
@@ -120,7 +118,7 @@ docs/
 - **Local setup guide** — clone-to-running in your own environment
 - **Contribution guide** — branching, code style, review process
 - **"Start here" README** — `docs/00-start-here.md`, the entry point that indexes everything above
-- **Root README** — `README.md` at the repository root, written last, in the executive shape (what it is, what it does, what is wrong, verdict). Template: [templates/root-readme.md](templates/root-readme.md). It links the SSO, access-control, observability, Henaket, and Once Only pages.
+- **Root README** — `README.md` at the repository root, written last. It says what the repository is and what it does, and links the guide. Template: [templates/root-readme.md](templates/root-readme.md). It does not contain a verdict.
 
 ## Codebase references
 

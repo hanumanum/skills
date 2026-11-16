@@ -74,10 +74,9 @@ create_stub "$DEST/operations/cicd-pipeline.md" "CI/CD pipeline"
 create_stub "$DEST/quality-security/test-strategy-coverage.md" "Test strategy & coverage"
 create_stub "$DEST/quality-security/maintainability-analysis.md" "Maintainability static analysis"
 create_stub "$DEST/quality-security/threat-model.md" "Threat model"
-create_stub "$DEST/quality-security/sso.md" "Single sign-on"
+create_stub "$DEST/quality-security/authentication.md" "Authentication"
 create_stub "$DEST/quality-security/access-control.md" "Access control"
-create_stub "$DEST/quality-security/design-system.md" "Design system"
-create_stub "$DEST/quality-security/once-only.md" "Once Only"
+create_stub "$DEST/quality-security/ui.md" "User interface"
 create_stub "$DEST/quality-security/known-issues-tech-debt.md" "Known issues / tech debt"
 mkdir -p "$DEST/quality-security/static-analysis"
 create_stub "$DEST/onboarding/local-setup.md" "Local setup"
@@ -145,10 +144,9 @@ System guide for this repository. Confidence tags: `confirmed` | `inferred` | `u
 - [Test strategy & coverage](quality-security/test-strategy-coverage.md)
 - [Maintainability static analysis](quality-security/maintainability-analysis.md)
 - [Threat model](quality-security/threat-model.md)
-- [Single sign-on](quality-security/sso.md)
+- [Authentication](quality-security/authentication.md)
 - [Access control](quality-security/access-control.md)
-- [Design system](quality-security/design-system.md)
-- [Once Only](quality-security/once-only.md)
+- [User interface](quality-security/ui.md)
 - [Known issues / tech debt](quality-security/known-issues-tech-debt.md)
 
 ### Onboarding

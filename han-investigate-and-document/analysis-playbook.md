@@ -13,7 +13,7 @@ find . -maxdepth 3 -type f \( -name 'README*' -o -name 'Dockerfile*' -o -name 'd
 rg -n "WebApplication\.Create|Map(Get|Post|Put|Delete)|app\.(get|post)|@app\.(route|get)|func main\(|SpringBootApplication" --glob '!**/node_modules/**' --glob '!**/bin/**' --glob '!**/obj/**'
 
 # Auth hints
-rg -n "Authorize|AddAuthentication|JWT|OAuth|ApiKey|Bearer|YesEm|YesEM|ImID|ImId|Henaket|henaket" --glob '!**/node_modules/**'
+rg -n "Authorize|AddAuthentication|JWT|OAuth|OIDC|ApiKey|Bearer|passport|session" --glob '!**/node_modules/**'
 
 # Data access
 rg -n "DbContext|EntityFramework|mongoose|prisma|typeorm|sequelize|SqlConnection|CREATE TABLE|Flyway|Liquibase|Migration" --glob '!**/node_modules/**'
@@ -124,18 +124,17 @@ External services: scan env samples (`*.env.example`, `appsettings*.json`, Helm 
 
 - Tests: locate `*Test*`, `*.spec.*`, coverage config; summarize layers (unit/integration/e2e) and gaps.
 - **Maintainability:** follow [maintainability.md](maintainability.md). Run `ensure-maintainability-tools.sh` (no `--install`). If tools are missing, ask; install only after the user agrees; then `run-maintainability.sh` and write `maintainability-analysis.md`. Feed P1 hotspots into the tech-debt register.
-- Threat model: entrypoints, authn/z, trust boundaries, injection sinks, secrets handling, dependency risk from SBOM. Link the SSO and access-control pages from the auth section.
-- **SSO:** [reviews/sso.md](reviews/sso.md). Write `quality-security/sso.md`. Record whether YesEm or ImID is called.
-- **Access control:** [reviews/access-control.md](reviews/access-control.md). Write `quality-security/access-control.md`. Grade None / Weak / RBAC / ABAC.
-- **Henaket:** [reviews/design-system.md](reviews/design-system.md). Write `quality-security/design-system.md`. One row per user surface.
-- **Once Only:** [reviews/once-only.md](reviews/once-only.md). Write `quality-security/once-only.md`. Open with the two violation counts, then the data-point table.
+- Threat model: entrypoints, authn/z, trust boundaries, injection sinks, secrets handling, dependency risk from SBOM. Link the authentication and access-control pages from the auth section.
+- **Authentication:** [reviews/authentication.md](reviews/authentication.md). Write `quality-security/authentication.md`. Record the mechanism the code calls. Name a provider only when the code names it.
+- **Access control:** [reviews/access-control.md](reviews/access-control.md). Write `quality-security/access-control.md`. Grade None / Weak / RBAC / ABAC from the checks in this tree.
+- **User interface:** [reviews/ui.md](reviews/ui.md). Write `quality-security/ui.md`. One row per user surface. Name a design system only when the code references it.
 - Debt: TODO/FIXME, deprecated APIs, ignored tests, pinned old frameworks.
 
 ## Onboarding
 
 - Local setup: exact commands that work in *this* environment when possible; otherwise document required services (DB versions, etc.) as `UNKNOWN` with placeholders.
 - Contribution: CONTRIBUTING.md, branch naming in CI, linters/formatters, PR template.
-- Start-here: index + reading order (context → architecture → local setup → deepen). Include `sso.md`, `access-control.md`, `design-system.md`, and `once-only.md` in the quality index.
-- Root README: after gap review, write `README.md` from [templates/root-readme.md](templates/root-readme.md). Link the five reviews from "What is wrong" and from the verdict.
+- Start-here: index + reading order (context → architecture → local setup → deepen). Include `authentication.md`, `access-control.md`, and `ui.md` in the quality index.
+- Root README: after gap review, write `README.md` from [templates/root-readme.md](templates/root-readme.md). Say what the repository is and what it does. Do not write a verdict.
 - Codebase paths in every section: relative markdown links, link text from the repo root, target from the doc file. See [doc-outline.md](doc-outline.md#codebase-references).
 - Footers: after the section files exist, end each of them with a link to `00-start-here.md` and links to the other markdown files in that same directory. See [doc-outline.md](doc-outline.md#document-footers). Do not chain previous/next across sections.

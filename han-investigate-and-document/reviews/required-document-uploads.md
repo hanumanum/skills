@@ -1,6 +1,6 @@
 # Required document uploads
 
-Write `docs/behavior/required-document-uploads.md`. Link it from `docs/00-start-here.md` under Behavior. This is an inventory of files the user must upload. It is not one of the five product reviews, and it does not go in the root README verdict.
+Write `docs/behavior/required-document-uploads.md`. Link it from `docs/00-start-here.md` under Behavior. This is an inventory of files the user must upload.
 
 ## When
 

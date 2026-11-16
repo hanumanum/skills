@@ -1,8 +1,10 @@
-# Track only skill folders whose names start with han-
+# Track skill folders whose names start with han-, the intro, and the two skill guides
 /*
 !/han-*/
 !/han-*/**
 !/README.md
+!/han-code-quality-audit.md
+!/han-investigate-and-document.md
 !/.gitignore
 
 __pycache__/
