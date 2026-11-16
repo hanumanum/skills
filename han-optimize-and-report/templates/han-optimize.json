@@ -1,0 +1,14 @@
+{
+  "baseUrl": "",
+  "pages": [],
+  "profile": "",
+  "productionHosts": [],
+  "auth": "none",
+  "comparison": {
+    "kind": "",
+    "location": ""
+  },
+  "observability": {
+    "tool": "none"
+  }
+}

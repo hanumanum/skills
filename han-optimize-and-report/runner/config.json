@@ -1,0 +1,60 @@
+{
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+  "acceptLanguage": "en-US,en;q=0.9",
+  "compare": {
+    "failOnRegression": false,
+    "p95RegressionPct": 20,
+    "ttfbP95RegressionPct": 20,
+    "errorRateIncreasePct": 1
+  },
+  "profiles": {
+    "lightest": {
+      "vus": 1,
+      "rps": 0.2,
+      "durationSec": 20,
+      "thinkTimeMs": 2000,
+      "timeoutMs": 30000,
+      "assetConcurrency": 4
+    },
+    "light": {
+      "vus": 2,
+      "rps": 0.5,
+      "durationSec": 30,
+      "thinkTimeMs": 1000,
+      "timeoutMs": 30000,
+      "assetConcurrency": 6
+    },
+    "normal": {
+      "vus": 5,
+      "rps": 1,
+      "durationSec": 30,
+      "thinkTimeMs": 500,
+      "timeoutMs": 30000,
+      "assetConcurrency": 12
+    },
+    "heavy": {
+      "vus": 10,
+      "rps": 2,
+      "durationSec": 45,
+      "thinkTimeMs": 200,
+      "timeoutMs": 45000,
+      "assetConcurrency": 16
+    },
+    "superheavy": {
+      "vus": 20,
+      "rps": 4,
+      "durationSec": 60,
+      "thinkTimeMs": 0,
+      "timeoutMs": 60000,
+      "assetConcurrency": 24
+    },
+    "disaster": {
+      "vus": 100,
+      "rps": 20,
+      "durationSec": 60,
+      "thinkTimeMs": 0,
+      "timeoutMs": 60000,
+      "assetConcurrency": 24
+    }
+  }
+}

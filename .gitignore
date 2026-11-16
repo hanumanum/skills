@@ -6,6 +6,7 @@
 !/han-code-quality-audit.md
 !/han-investigate-and-document.md
 !/han-fast-iterate-git-ops.md
+!/han-optimize-and-report.md
 !/.gitignore
 
 __pycache__/
